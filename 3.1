@@ -1,0 +1,92 @@
+import React, { useState } from "react";
+import { FiSearch } from 'react-icons/fi';
+import { FaInstagram, FaTwitter, FaFacebook, FaLinkedin, FaGithub, FaPinterest, FaSnapchat, FaTwitch, FaYoutube, FaReddit } from 'react-icons/fa';
+
+const App = () => {
+  const [username, setUsername] = useState(""); // Input field state
+  const [available, setAvailable] = useState([]); // State to hold the results
+  const [loading, setLoading] = useState(false); // Loading state
+
+  const handleInputChange = (e) => {
+    setUsername(e.target.value);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault(); // Prevent form submission
+    if (!username) return; // If no username, do nothing
+
+    setLoading(true); // Set loading to true while checking
+    // Simulate checking username on various platforms
+    setTimeout(() => {
+      const sites = [
+        { name: "Instagram", available: Math.random() > 0.5, logo: <FaInstagram size={50} /> },
+        { name: "Twitter", available: Math.random() > 0.5, logo: <FaTwitter size={50} /> },
+        { name: "Facebook", available: Math.random() > 0.5, logo: <FaFacebook size={50} /> },
+        { name: "LinkedIn", available: Math.random() > 0.5, logo: <FaLinkedin size={50} /> },
+        { name: "GitHub", available: Math.random() > 0.5, logo: <FaGithub size={50} /> },
+        { name: "Pinterest", available: Math.random() > 0.5, logo: <FaPinterest size={50} /> },
+        { name: "Snapchat", available: Math.random() > 0.5, logo: <FaSnapchat size={50} /> },
+        { name: "Twitch", available: Math.random() > 0.5, logo: <FaTwitch size={50} /> },
+        { name: "YouTube", available: Math.random() > 0.5, logo: <FaYoutube size={50} /> },
+        { name: "Reddit", available: Math.random() > 0.5, logo: <FaReddit size={50} /> }
+      ];
+      setAvailable(sites); // Set the available sites to state
+      setLoading(false); // Turn off the loading state
+    }, 2000); // Simulate a delay of 2 seconds for the API call
+  };
+
+  return (
+    <div className="min-h-screen bg-white flex flex-col items-center">
+      {/* Navigation Bar */}
+      <nav className="w-full bg-blue-500 text-white p-4 flex justify-between items-center fixed top-0 left-0 z-50">
+        <div className="text-xl font-bold">Username Checker</div>
+        <div className="space-x-4">
+          <a href="#home" className="hover:text-gray-200">Home</a>
+          <a href="#account" className="hover:text-gray-200">Account</a>
+          <a href="#help" className="hover:text-gray-200">Help</a>
+        </div>
+      </nav>
+
+      {/* Main Content */}
+      <div className="pt-16 w-full max-w-md">
+        <form className="w-full flex flex-col items-center mt-12" onSubmit={handleSubmit}>
+          <div className="flex items-center space-x-2 mb-6 w-full">
+            <input
+              type="text"
+              className="border p-3 w-full rounded-md text-xl"
+              placeholder="Enter a username"
+              value={username}
+              onChange={handleInputChange}
+            />
+            <button type="submit" className="bg-blue-500 text-white p-3 rounded-md flex items-center">
+              <FiSearch size={24} />
+            </button>
+          </div>
+        </form>
+
+        {loading ? (
+          <div className="text-xl text-gray-600">Checking...</div> // Loading state
+        ) : (
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 w-full max-w-6xl mt-8">
+            {available.map((site, index) => (
+              <div
+                key={index}
+                className={`p-6 rounded-lg border shadow-lg ${
+                  site.available ? "bg-green-100" : "bg-red-100"
+                } flex flex-col items-center justify-center space-y-4`}
+              >
+                <div>{site.logo}</div> {/* Display website logo */}
+                <div>
+                  <h2 className="text-lg font-bold">{site.name}</h2>
+                  <p className="text-sm">{site.available ? "Available" : "Taken"}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default App;
