@@ -1,0 +1,113 @@
+import React, { useState } from "react";
+import "./App.css";
+
+// Import logos from the logos folder
+import instagramLogo from "./logos/light/instagram.svg";
+import twitterLogo from "./logos/light/x.svg";
+import facebookLogo from "./logos/light/facebook.svg";
+import youtubeLogo from "./logos/light/youtube.svg";
+import snapchatLogo from "./logos/light/snapchat.svg";
+import tiktokLogo from "./logos/light/tiktok.svg";
+
+function App() {
+  const [username, setUsername] = useState("");
+  const [available, setAvailable] = useState([]);
+  const [unavailable, setUnavailable] = useState([]);
+
+  const checkUsernameAvailability = () => {
+    const websites = [
+      { name: "Instagram", url: "https://instagram.com/", isAvailable: true, logo: instagramLogo },
+      { name: "Twitter", url: "https://twitter.com/", isAvailable: false, logo: twitterLogo },
+      { name: "Facebook", url: "https://facebook.com/", isAvailable: true, logo: facebookLogo },
+      { name: "YouTube", url: "https://youtube.com/", isAvailable: false, logo: youtubeLogo },
+      { name: "Snapchat", url: "https://snapchat.com/", isAvailable: true, logo: snapchatLogo },
+      { name: "TikTok", url: "https://tiktok.com/", isAvailable: false, logo: tiktokLogo },
+      // Add more websites with logos as needed
+    ];
+
+    const availableWebsites = websites.filter((site) => site.isAvailable);
+    const unavailableWebsites = websites.filter((site) => !site.isAvailable);
+
+    setAvailable(availableWebsites);
+    setUnavailable(unavailableWebsites);
+  };
+
+  return (
+    <div className="min-h-screen bg-white text-gray-800">
+      <div className="max-w-lg mx-auto p-6">
+        <h1 className="text-4xl font-bold mb-4">Check Username Availability</h1>
+        <input
+          type="text"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          placeholder="Enter username"
+          className="w-full p-3 border rounded-lg mb-4"
+        />
+        <button
+          onClick={checkUsernameAvailability}
+          className="w-full bg-blue-500 text-white p-3 rounded-lg"
+        >
+          Check Availability
+        </button>
+
+        {/* Available Websites */}
+        <div className="mt-6">
+          <h2 className="text-2xl font-semibold mb-2">Available on:</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            {available.map((site) => (
+              <div key={site.name} className="border border-gray-200 rounded-lg p-6 text-center shadow-lg">
+                <img
+                  src={site.logo}
+                  alt={site.name}
+                  className="w-16 h-16 mx-auto mb-4 object-contain"
+                />
+                <h3 className="text-xl font-semibold mb-2">{site.name}</h3>
+                <p>
+                  <a
+                    href={site.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-500 hover:underline"
+                  >
+                    Visit
+                  </a>
+                </p>
+                <p className="text-green-500 font-semibold mt-2">Available</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Unavailable Websites */}
+        <div className="mt-6">
+          <h2 className="text-2xl font-semibold mb-2">Unavailable on:</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            {unavailable.map((site) => (
+              <div key={site.name} className="border border-gray-200 rounded-lg p-6 text-center shadow-lg">
+                <img
+                  src={site.logo}
+                  alt={site.name}
+                  className="w-16 h-16 mx-auto mb-4 object-contain"
+                />
+                <h3 className="text-xl font-semibold mb-2">{site.name}</h3>
+                <p>
+                  <a
+                    href={site.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-500 hover:underline"
+                  >
+                    Visit
+                  </a>
+                </p>
+                <p className="text-red-500 font-semibold mt-2">Unavailable</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default App;
