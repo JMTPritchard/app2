@@ -1,0 +1,71 @@
+import React, { useState } from "react";
+import { FiSearch } from 'react-icons/fi';
+
+const App = () => {
+  const [username, setUsername] = useState(""); // Input field state
+  const [available, setAvailable] = useState([]); // State to hold the results
+  const [loading, setLoading] = useState(false); // Loading state
+
+  const handleInputChange = (e) => {
+    setUsername(e.target.value);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault(); // Prevent form submission
+    if (!username) return; // If no username, do nothing
+
+    setLoading(true); // Set loading to true while checking
+    // Simulate checking username on various platforms
+    setTimeout(() => {
+      // Dummy logic: You can replace this with actual API calls
+      const sites = [
+        { name: "Instagram", available: Math.random() > 0.5 },
+        { name: "Twitter", available: Math.random() > 0.5 },
+        { name: "Facebook", available: Math.random() > 0.5 },
+        { name: "LinkedIn", available: Math.random() > 0.5 }
+      ];
+      setAvailable(sites); // Set the available sites to state
+      setLoading(false); // Turn off the loading state
+    }, 2000); // Simulate a delay of 2 seconds for the API call
+  };
+
+  return (
+    <div className="min-h-screen bg-white flex flex-col justify-center items-center space-y-8">
+      <h1 className="text-3xl font-bold text-gray-800">Username Checker</h1>
+      <form className="w-full max-w-md flex flex-col items-center" onSubmit={handleSubmit}>
+        <div className="flex items-center space-x-2 mb-4 w-full">
+          <input
+            type="text"
+            className="border p-2 w-full rounded-md"
+            placeholder="Enter a username"
+            value={username}
+            onChange={handleInputChange}
+          />
+          <button type="submit" className="bg-blue-500 text-white p-2 rounded-md flex items-center">
+            <FiSearch />
+          </button>
+        </div>
+      </form>
+
+      {loading ? (
+        <div className="text-xl text-gray-600">Checking...</div> // Loading state
+      ) : (
+        <div className="grid grid-cols-3 gap-4 w-full max-w-4xl">
+          {available.map((site, index) => (
+            <div
+              key={index}
+              className={`p-4 rounded-lg border ${
+                site.available ? "bg-green-100" : "bg-red-100"
+              }`}
+            >
+              <h2 className="text-lg font-bold">{site.name}</h2>
+              <p className="text-sm">{site.available ? "Available" : "Taken"}</p>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default App;
