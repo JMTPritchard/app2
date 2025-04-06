@@ -1,0 +1,118 @@
+import React, { useState } from "react";
+import { FiSearch } from 'react-icons/fi';
+import {
+  FaInstagram, FaTwitter, FaFacebook, FaLinkedin, FaGithub, FaPinterest,
+  FaSnapchat, FaTwitch, FaYoutube, FaReddit, FaTumblr, FaMedium, FaDribbble,
+  FaVimeo, FaStackOverflow, FaSlack, FaDiscord, FaWeibo, FaTiktok, FaGoogle,
+  FaSoundcloud, FaApple, FaMicrosoft, FaAmazon, FaSteam, FaSkype, FaFlickr
+} from 'react-icons/fa';
+
+const platforms = [
+  { name: "Instagram", icon: <FaInstagram size={50} /> },
+  { name: "Twitter", icon: <FaTwitter size={50} /> },
+  { name: "Facebook", icon: <FaFacebook size={50} /> },
+  { name: "LinkedIn", icon: <FaLinkedin size={50} /> },
+  { name: "GitHub", icon: <FaGithub size={50} /> },
+  { name: "Pinterest", icon: <FaPinterest size={50} /> },
+  { name: "Snapchat", icon: <FaSnapchat size={50} /> },
+  { name: "Twitch", icon: <FaTwitch size={50} /> },
+  { name: "YouTube", icon: <FaYoutube size={50} /> },
+  { name: "Reddit", icon: <FaReddit size={50} /> },
+  { name: "Tumblr", icon: <FaTumblr size={50} /> },
+  { name: "Medium", icon: <FaMedium size={50} /> },
+  { name: "Dribbble", icon: <FaDribbble size={50} /> },
+  { name: "Vimeo", icon: <FaVimeo size={50} /> },
+  { name: "StackOverflow", icon: <FaStackOverflow size={50} /> },
+  { name: "Slack", icon: <FaSlack size={50} /> },
+  { name: "Discord", icon: <FaDiscord size={50} /> },
+  { name: "Weibo", icon: <FaWeibo size={50} /> },
+  { name: "TikTok", icon: <FaTiktok size={50} /> },
+  { name: "Gmail", icon: <FaGoogle size={50} /> },
+  { name: "SoundCloud", icon: <FaSoundcloud size={50} /> },
+  { name: "Apple", icon: <FaApple size={50} /> },
+  { name: "Microsoft", icon: <FaMicrosoft size={50} /> },
+  { name: "Amazon", icon: <FaAmazon size={50} /> },
+  { name: "Steam", icon: <FaSteam size={50} /> },
+  { name: "Skype", icon: <FaSkype size={50} /> },
+  { name: "Flickr", icon: <FaFlickr size={50} /> }
+];
+
+const App = () => {
+  const [username, setUsername] = useState("");
+  const [available, setAvailable] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  const handleInputChange = (e) => {
+    setUsername(e.target.value);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!username) return;
+
+    setLoading(true);
+    setTimeout(() => {
+      const results = platforms.map((site) => ({
+        name: site.name,
+        logo: site.icon,
+        available: Math.random() > 0.5
+      }));
+      setAvailable(results);
+      setLoading(false);
+    }, 1500);
+  };
+
+  return (
+    <div className="min-h-screen bg-white flex flex-col items-center">
+      {/* Nav */}
+      <nav className="w-full bg-blue-600 text-white p-4 flex justify-between items-center fixed top-0 z-50 shadow-md">
+        <div className="text-xl font-bold">Username Checker</div>
+        <div className="space-x-4">
+          <a href="#home" className="hover:text-gray-200">Home</a>
+          <a href="#account" className="hover:text-gray-200">Account</a>
+          <a href="#help" className="hover:text-gray-200">Help</a>
+        </div>
+      </nav>
+
+      {/* Search */}
+      <div className="pt-20 w-full max-w-7xl px-4">
+        <form className="flex justify-center mb-6" onSubmit={handleSubmit}>
+          <input
+            type="text"
+            className="border p-2 w-1/2 sm:w-1/3 lg:w-1/4 rounded-md text-lg shadow"
+            placeholder="Enter a username"
+            value={username}
+            onChange={handleInputChange}
+          />
+          <button type="submit" className="bg-blue-500 text-white p-2 rounded-md ml-2 hover:bg-blue-600 transition">
+            <FiSearch size={24} />
+          </button>
+        </form>
+
+        {/* Loader or Results */}
+        {loading ? (
+          <div className="flex justify-center items-center h-40">
+            <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500"></div>
+          </div>
+        ) : (
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6">
+            {available.map((site, index) => (
+              <div
+                key={index}
+                className={`p-6 rounded-xl border text-center transition-transform transform hover:scale-105 hover:shadow-xl ${
+                  site.available ? "bg-green-100 border-green-300" : "bg-red-100 border-red-300"
+                }`}
+              >
+                <div>{site.logo}</div>
+                <h2 className="text-md font-bold mt-2">{site.name}</h2>
+                <p className="text-sm">{site.available ? "Available" : "Taken"}</p>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default App;
