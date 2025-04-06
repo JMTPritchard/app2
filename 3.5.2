@@ -1,0 +1,131 @@
+import React, { useState } from "react";
+import { FiSearch } from 'react-icons/fi';
+import {
+  FaInstagram, FaTwitter, FaFacebook, FaLinkedin, FaGithub, FaPinterest,
+  FaSnapchat, FaTwitch, FaYoutube, FaReddit, FaGoogle, FaTumblr, FaDiscord,
+  FaSpotify, FaDribbble, FaSteam, FaVimeo, FaTiktok
+} from 'react-icons/fa';
+import { motion } from "framer-motion";
+
+const sitesData = [
+  { name: "Instagram", icon: <FaInstagram size={50} /> },
+  { name: "Twitter", icon: <FaTwitter size={50} /> },
+  { name: "Facebook", icon: <FaFacebook size={50} /> },
+  { name: "LinkedIn", icon: <FaLinkedin size={50} /> },
+  { name: "GitHub", icon: <FaGithub size={50} /> },
+  { name: "Pinterest", icon: <FaPinterest size={50} /> },
+  { name: "Snapchat", icon: <FaSnapchat size={50} /> },
+  { name: "Twitch", icon: <FaTwitch size={50} /> },
+  { name: "YouTube", icon: <FaYoutube size={50} /> },
+  { name: "Reddit", icon: <FaReddit size={50} /> },
+  { name: "Gmail", icon: <FaGoogle size={50} /> },
+  { name: "Tumblr", icon: <FaTumblr size={50} /> },
+  { name: "Discord", icon: <FaDiscord size={50} /> },
+  { name: "Spotify", icon: <FaSpotify size={50} /> },
+  { name: "Dribbble", icon: <FaDribbble size={50} /> },
+  { name: "Steam", icon: <FaSteam size={50} /> },
+  { name: "Vimeo", icon: <FaVimeo size={50} /> },
+  { name: "TikTok", icon: <FaTiktok size={50} /> },
+];
+
+const App = () => {
+  const [username, setUsername] = useState("");
+  const [available, setAvailable] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  const handleInputChange = (e) => setUsername(e.target.value);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!username) return;
+    setLoading(true);
+
+    setTimeout(() => {
+      const checkedSites = sitesData.map((site) => ({
+        ...site,
+        available: Math.random() > 0.5
+      }));
+      setAvailable(checkedSites);
+      setLoading(false);
+    }, 1500);
+  };
+
+  const container = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1
+      }
+    }
+  };
+
+  const item = {
+    hidden: { opacity: 0, y: 20 },
+    show: { opacity: 1, y: 0 }
+  };
+
+  return (
+    <div className="min-h-screen bg-white flex flex-col items-center px-4">
+      {/* Navbar */}
+      <nav className="w-full bg-blue-600 text-white p-4 flex justify-between items-center fixed top-0 z-50">
+        <div className="text-xl font-bold">Username Checker</div>
+        <div className="space-x-4">
+          <a href="#home" className="hover:text-gray-200">Home</a>
+          <a href="#account" className="hover:text-gray-200">Account</a>
+          <a href="#help" className="hover:text-gray-200">Help</a>
+        </div>
+      </nav>
+
+      {/* Search */}
+      <div className="pt-20 w-full max-w-3xl text-center">
+        <form onSubmit={handleSubmit} className="flex justify-center items-center space-x-2 mb-6">
+          <input
+            type="text"
+            placeholder="Enter a username"
+            className="border p-2 rounded-md w-full sm:w-2/3 md:w-1/2 text-lg"
+            value={username}
+            onChange={handleInputChange}
+          />
+          <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded-md">
+            <FiSearch size={24} />
+          </button>
+        </form>
+      </div>
+
+      {/* Loading */}
+      {loading && (
+        <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-600 border-solid mt-8"></div>
+      )}
+
+      {/* Results */}
+      {!loading && available.length > 0 && (
+        <motion.div
+          className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6 w-full max-w-7xl mb-12"
+          variants={container}
+          initial="hidden"
+          animate="show"
+        >
+          {available.map((site, index) => (
+            <motion.div
+              key={index}
+              variants={item}
+              title={`${site.name}: This username is ${site.available ? 'available' : 'taken'}`}
+              className={`border-2 border-black p-4 rounded-xl shadow-md transform hover:scale-105 transition-all duration-200 flex flex-col items-center justify-center space-y-2 text-center ${
+                site.available ? "bg-green-100" : "bg-red-100"
+              }`}
+            >
+              <div>{site.icon}</div>
+              <div>
+                <h2 className="font-semibold">{site.name}</h2>
+                <p className="text-sm">{site.available ? "Available" : "Taken"}</p>
+              </div>
+            </motion.div>
+          ))}
+        </motion.div>
+      )}
+    </div>
+  );
+};
+
+export default App;
