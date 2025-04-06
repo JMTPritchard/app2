@@ -1,0 +1,99 @@
+import React, { useState } from 'react';
+
+import instagramLogo from "./logos/light/instagram.svg";
+import twitterLogo from "./logos/light/x.svg";
+import facebookLogo from "./logos/light/facebook.svg";
+import youtubeLogo from "./logos/light/youtube.svg";
+import snapchatLogo from "./logos/light/snapchat.svg";
+import tiktokLogo from "./logos/light/tiktok.svg";
+
+const App = () => {
+  const [username, setUsername] = useState('');
+  const [availability, setAvailability] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  const checkUsername = async () => {
+    if (username === '') {
+      alert('Please enter a username');
+      return;
+    }
+
+    setLoading(true);
+    setAvailability([]);  // Reset availability list
+
+    // Example sites (replace with actual API calls or data)
+    const sites = [
+      { name: 'Facebook', available: Math.random() > 0.5, logo: facebookLogo },
+      { name: 'Twitter', available: Math.random() > 0.5, logo: twitterLogo },
+      { name: 'Instagram', available: Math.random() > 0.5, logo: instagramLogo },
+      { name: 'YouTube', available: Math.random() > 0.5, logo: youtubeLogo },
+      { name: 'Snapchat', available: Math.random() > 0.5, logo: snapchatLogo },
+      { name: 'TikTok', available: Math.random() > 0.5, logo: tiktokLogo },
+    ];
+
+    setTimeout(() => {
+      setAvailability(sites);
+      setLoading(false);
+    }, 1000);  // Simulate API delay
+  };
+
+  return (
+    <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center py-10 px-4">
+      <div className="max-w-3xl w-full bg-white p-12 rounded-xl shadow-xl space-y-8">
+        <h1 className="text-4xl font-bold text-center text-gray-900 mb-4">Check Username Availability</h1>
+        
+        {/* Username Input */}
+        <input
+          type="text"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          placeholder="Enter a username"
+          className="w-full p-5 text-xl rounded-xl border-2 border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 placeholder-gray-500"
+        />
+        
+        {/* Check Button */}
+        <button
+          onClick={checkUsername}
+          className="w-full py-4 text-xl bg-indigo-600 text-white font-semibold rounded-lg shadow-lg hover:bg-indigo-700 transition-all duration-300 ease-in-out"
+        >
+          {loading ? (
+            <div className="flex justify-center items-center space-x-2">
+              <div className="w-6 h-6 border-4 border-t-4 border-indigo-600 border-solid rounded-full animate-spin"></div>
+              <span>Checking...</span>
+            </div>
+          ) : (
+            'Check Availability'
+          )}
+        </button>
+
+        {/* Result Grid */}
+        {loading ? (
+          <div className="text-center text-gray-500">Checking availability...</div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
+            {availability.map((site, index) => (
+              <div
+                key={index}
+                className={`p-6 rounded-lg shadow-lg border-2 transition-all duration-300 ease-in-out ${site.available ? 'bg-green-50 border-green-500' : 'bg-red-50 border-red-500'}`}
+              >
+                <div className="flex justify-center items-center mb-4">
+                  <img
+                    src={site.logo}
+                    alt={site.name}
+                    className="w-20 h-20 object-contain"
+                  />
+                </div>
+                <h2 className="text-lg font-semibold text-center text-gray-800">{site.name}</h2>
+                <p className={`text-center text-lg font-semibold ${site.available ? 'text-green-600' : 'text-red-600'}`}>
+                  {site.available ? 'Available' : 'Taken'}
+                </p>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default App;
